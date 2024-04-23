@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    command: bash start-server.sh
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=cookiecutter.settings
+      - DB_NAME=cookiecutter
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_PORT=5432
+      - PYTHONBREAKPOINT=ipdb.set_trace
+    volumes:
+      - .:/cookiecutter
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=cookiecutter
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+  redis:
+    image: redis:latest
